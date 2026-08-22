@@ -17,3 +17,5 @@ tsconfig.json
 *.vsix
 scripts/**
 human-type-*.vsix
+START-HERE.md
+CONTRIBUTING.md
