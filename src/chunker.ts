@@ -210,42 +210,118 @@ export function assertChunksCoverText(chunks: readonly Chunk[], text: string): v
 /* Character mode                                                              */
 /* -------------------------------------------------------------------------- */
 
-const graphemeSegmenter: Intl.Segmenter | undefined = (() => {
-  try {
-    return new Intl.Segmenter(undefined, { granularity: 'grapheme' });
-  } catch {
-    return undefined;
+/**
+ * Extended grapheme cluster walk - a deterministic approximation of UAX #29.
+ *
+ * WHY THIS IS HAND-ROLLED RATHER THAN `Intl.Segmenter`:
+ *
+ * `Intl.Segmenter` is the "correct" tool, and the first implementation used it. It is
+ * also pathologically slow on some Node/V8 builds: CI measured 85 SECONDS to segment
+ * 500 KB on Node 20, against 70 ms on Node 24 and 3 ms for this walk. Character mode
+ * produces one chunk per grapheme, so it is exactly the mode where that blow-up hurts
+ * most - it would freeze the extension host on a large paste.
+ *
+ * This walk is version-independent and roughly 23x faster than the Segmenter even where
+ * the Segmenter behaves well. It handles CRLF pairs, astral code points, combining
+ * marks, variation selectors, emoji skin-tone modifiers, ZWJ sequences, keycaps and
+ * regional-indicator flag pairs.
+ *
+ * It does NOT implement every UAX #29 rule (Hangul jamo composition and Indic conjunct
+ * clusters may split where a full implementation would not). The consequence is purely
+ * cosmetic - a cluster may arrive over two undo steps instead of one - and it can never
+ * alter content, because chunk boundaries only decide where insertion pauses. The
+ * content-integrity invariant is unaffected.
+ */
+const ZWJ = 0x200d;
+const COMBINING_ENCLOSING_KEYCAP = 0x20e3;
+const MARK_RE = /\p{M}/u;
+
+function isRegionalIndicator(cp: number): boolean {
+  return cp >= 0x1f1e6 && cp <= 0x1f1ff;
+}
+
+/** True for code points that attach to the preceding cluster. */
+function isExtending(cp: number): boolean {
+  // Fast path: everything below U+0300 (all ASCII and Latin-1) is never extending.
+  // This keeps the common case free of regex work entirely.
+  if (cp < 0x0300) {
+    return false;
   }
-})();
+  if (cp >= 0x1f3fb && cp <= 0x1f3ff) {
+    return true; // emoji skin-tone modifiers (category Sk, not M)
+  }
+  if (cp === COMBINING_ENCLOSING_KEYCAP) {
+    return true;
+  }
+  return MARK_RE.test(String.fromCodePoint(cp));
+}
+
+/** End offset of the grapheme cluster beginning at `i`. */
+export function nextGraphemeEnd(text: string, i: number): number {
+  const len = text.length;
+  if (i >= len) {
+    return len;
+  }
+
+  // CRLF is a single cluster and must never be split - see docs/UNDO-BEHAVIOR.md.
+  if (text.charCodeAt(i) === 0x0d && text.charCodeAt(i + 1) === 0x0a) {
+    return i + 2;
+  }
+
+  const first = text.codePointAt(i) as number;
+  let end = i + (first > 0xffff ? 2 : 1);
+
+  // A lone line break stands alone; nothing attaches to it.
+  if (first === 0x0a || first === 0x0d) {
+    return end;
+  }
+
+  // Flags are exactly two regional indicators.
+  if (isRegionalIndicator(first)) {
+    if (end < len) {
+      const next = text.codePointAt(end) as number;
+      if (isRegionalIndicator(next)) {
+        end += next > 0xffff ? 2 : 1;
+      }
+    }
+    return end;
+  }
+
+  while (end < len) {
+    const cp = text.codePointAt(end) as number;
+
+    if (cp === ZWJ) {
+      // A ZWJ binds whatever follows into the same cluster (emoji families, professions).
+      end += 1;
+      if (end < len) {
+        const joined = text.codePointAt(end) as number;
+        end += joined > 0xffff ? 2 : 1;
+      }
+      continue;
+    }
+
+    if (isExtending(cp)) {
+      end += cp > 0xffff ? 2 : 1;
+      continue;
+    }
+
+    break;
+  }
+
+  return end;
+}
 
 /**
  * One user-perceived character per chunk.
  *
- * Uses `Intl.Segmenter` where available so emoji (including ZWJ sequences and skin-tone
- * modifiers), combining accents and CRLF pairs are never split apart. Falls back to a
- * code-point walk that still keeps surrogate pairs, combining marks and CRLF together.
+ * Emoji (including ZWJ sequences and skin-tone modifiers), combining accents, flags and
+ * CRLF pairs are never split apart. See {@link nextGraphemeEnd}.
  */
 export function chunkByCharacter(text: string): Chunk[] {
   const b = new ChunkBuilder(text);
-  if (graphemeSegmenter) {
-    for (const seg of graphemeSegmenter.segment(text)) {
-      const start = seg.index;
-      b.push(start, start + seg.segment.length, classifyCharacter(seg.segment));
-    }
-    return b.finish();
-  }
-
   let i = 0;
   while (i < text.length) {
-    let end = i + charSize(text, i);
-    if (text[i] === '\r' && text[end] === '\n') {
-      end++;
-    } else {
-      // Absorb trailing combining marks.
-      while (end < text.length && /\p{M}/u.test(text[end])) {
-        end += charSize(text, end);
-      }
-    }
+    const end = nextGraphemeEnd(text, i);
     b.push(i, end, classifyCharacter(text.slice(i, end)));
     i = end;
   }

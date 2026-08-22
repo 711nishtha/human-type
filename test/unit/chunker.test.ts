@@ -142,6 +142,52 @@ suite('chunker: character mode', () => {
   test('preserves tabs and runs of spaces as individual characters', () => {
     assert.deepStrictEqual(texts(chunkByCharacter('\t  ')), ['\t', ' ', ' ']);
   });
+
+  test('keeps a regional-indicator flag pair together', () => {
+    const flag = '\u{1F1EE}\u{1F1F3}'; // IN
+    assert.deepStrictEqual(texts(chunkByCharacter(flag + 'x')), [flag, 'x']);
+  });
+
+  test('keeps an emoji skin-tone modifier with its base', () => {
+    const wave = '\u{1F44B}\u{1F3FD}';
+    assert.deepStrictEqual(texts(chunkByCharacter(wave + '!')), [wave, '!']);
+  });
+
+  test('keeps a keycap sequence together', () => {
+    const keycap = '1️⃣';
+    assert.deepStrictEqual(texts(chunkByCharacter(keycap)), [keycap]);
+  });
+
+  test('keeps a multi-person ZWJ family together', () => {
+    const family = '\u{1F468}‍\u{1F469}‍\u{1F467}‍\u{1F466}';
+    assert.deepStrictEqual(texts(chunkByCharacter(family)), [family]);
+  });
+
+  test('keeps a variation selector with its base', () => {
+    const heart = '❤️';
+    assert.deepStrictEqual(texts(chunkByCharacter(heart + 'a')), [heart, 'a']);
+  });
+
+  test('does not merge two separate flags into one chunk', () => {
+    const a = '\u{1F1EE}\u{1F1F3}';
+    const b = '\u{1F1FA}\u{1F1F8}';
+    assert.deepStrictEqual(texts(chunkByCharacter(a + b)), [a, b]);
+  });
+
+  test('a lone line break never absorbs the following character', () => {
+    assert.deepStrictEqual(texts(chunkByCharacter('\na')), ['\n', 'a']);
+    assert.deepStrictEqual(texts(chunkByCharacter('\ra')), ['\r', 'a']);
+  });
+
+  test('is fast on large input (guards the Intl.Segmenter blow-up)', function () {
+    // Regression guard: Intl.Segmenter took 85 SECONDS for this on CI's Node 20.
+    const src = 'const x = 1; // comment\n'.repeat(20000); // ~480 KB
+    const started = Date.now();
+    const chunks = chunkByCharacter(src);
+    const elapsed = Date.now() - started;
+    assert.strictEqual(chunks.map((c) => c.text).join(''), src);
+    assert.ok(elapsed < 5000, `character chunking took ${elapsed} ms for ${src.length} chars`);
+  });
 });
 
 suite('chunker: word mode', () => {
@@ -474,7 +520,11 @@ suite('chunker: performance', () => {
         const elapsed = Date.now() - started;
         assert.strictEqual(chunksToText(chunks), src, `${mode} altered ${kb} KB of content`);
         assert.ok(chunks.length <= 5000, `${mode}: ${chunks.length} chunks exceeded the cap`);
-        assert.ok(elapsed < 5000, `${mode} took ${elapsed} ms for ${kb} KB`);
+        // A pathology canary, not a benchmark. Shared CI runners are slow and
+        // variable, so the budget is deliberately loose - it exists to catch
+        // super-linear blow-ups like the 85-second Intl.Segmenter regression,
+        // not to police a few hundred milliseconds.
+        assert.ok(elapsed < 20000, `${mode} took ${elapsed} ms for ${kb} KB`);
         // eslint-disable-next-line no-console
         console.log(`        ${kb} KB / ${mode}: ${chunks.length} chunks in ${elapsed} ms`);
       }

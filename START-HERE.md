@@ -27,7 +27,7 @@ stops being true, everything else is irrelevant.
 npm test
 ```
 
-Compile → lint → 239 unit tests → 67 integration tests against a real VS Code instance.
+Compile → lint → 247 unit tests → 67 integration tests against a real VS Code instance.
 Takes about a minute. This is exactly what CI runs.
 
 ## 3. Replace the last placeholder

@@ -50,7 +50,7 @@ It uses VS Code's **native** undo stack. There is no custom undo system, no
 | **Progress feedback** | A cancellable status-bar item, with no flicker on short insertions |
 | **Content-safe** | Every insertion is verified chunk by chunk against the source |
 | **Local only** | No network calls, no telemetry, no AI service |
-| **Tested** | 306 automated tests, including a suite that drives a real VS Code instance |
+| **Tested** | 314 automated tests, including a suite that drives a real VS Code instance |
 
 ---
 
@@ -343,14 +343,18 @@ Measured on Windows 11 x64, VS Code 1.134, with `maxChunks: 300`:
 
 | Input | Chunks | Time | Rate |
 | --- | --- | --- | --- |
-| 1 KB | 276 | 2.9 s | ~94 chunks/s |
-| 10 KB | 292 | 2.9 s | ~100 chunks/s |
-| 100 KB | 300 | 3.3 s | ~90 chunks/s |
-| 500 KB | 300 | 3.6 s | ~84 chunks/s |
+| 1 KB | 276 | 1.0 s | ~285 chunks/s |
+| 10 KB | 292 | 1.0 s | ~279 chunks/s |
+| 100 KB | 300 | 1.2 s | ~257 chunks/s |
+| 500 KB | 300 | 1.9 s | ~155 chunks/s |
 
-The chunking itself is fast — 500 KB splits in 73 ms in Smart mode. Wall-clock time is
-dominated by the per-chunk round trip between the extension host and the editor, roughly
-10 ms each. **Insertion time scales with chunk count, not with input size.**
+Rates vary with machine load; treat these as indicative rather than exact.
+
+Chunking itself is a small fraction of that: 500 KB splits in about 85 ms in Smart mode
+and 45 ms in Character mode. Wall-clock time is dominated by the per-chunk round trip
+between the extension host and the editor. **Insertion time scales with chunk count, not
+with input size** — which is exactly why `maxChunks` is the setting that controls how long
+a large insertion takes.
 
 Practical guidance:
 
@@ -485,7 +489,7 @@ npm run test:integration   # downloads and drives a real VS Code instance
 npm run lint
 ```
 
-**306 tests**: 239 unit and 67 integration.
+**314 tests**: 247 unit and 67 integration.
 
 The unit suite's centrepiece is a property check — 30 samples × 4 modes — asserting that
 rejoining the chunks reproduces the source exactly. If a chunking change ever altered a
