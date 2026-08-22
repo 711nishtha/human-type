@@ -1,0 +1,190 @@
+{
+  "name": "human-type",
+  "displayName": "Human Type",
+  "description": "Granular, human-like text insertion for VS Code. AI writes the code. You control how it enters your editor.",
+  "version": "0.1.0",
+  "publisher": "your-publisher-id",
+  "license": "MIT",
+  "icon": "icon.png",
+  "pricing": "Free",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters"
+  ],
+  "keywords": [
+    "paste",
+    "typing",
+    "undo",
+    "clipboard",
+    "insert",
+    "granular undo",
+    "ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/human-type.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/human-type/issues"
+  },
+  "homepage": "https://github.com/YOUR_GITHUB_USERNAME/human-type#readme",
+  "main": "./out/src/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "humanType.insertClipboard",
+        "title": "Insert Clipboard",
+        "category": "Human Type"
+      },
+      {
+        "command": "humanType.insertText",
+        "title": "Insert Text...",
+        "category": "Human Type"
+      },
+      {
+        "command": "humanType.insertSelection",
+        "title": "Insert Selection",
+        "category": "Human Type"
+      },
+      {
+        "command": "humanType.cancel",
+        "title": "Cancel Current Insertion",
+        "category": "Human Type"
+      },
+      {
+        "command": "humanType.openSettings",
+        "title": "Open Settings",
+        "category": "Human Type"
+      },
+      {
+        "command": "humanType.testUndoBehavior",
+        "title": "Test Undo Behavior",
+        "category": "Human Type"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "humanType.cancel",
+        "key": "escape",
+        "when": "editorTextFocus && humanType.inserting"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "humanType.cancel",
+          "when": "humanType.inserting"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Human Type",
+      "properties": {
+        "humanType.mode": {
+          "type": "string",
+          "enum": [
+            "character",
+            "word",
+            "line",
+            "smart"
+          ],
+          "enumDescriptions": [
+            "One grapheme (user-perceived character) per undo step. Slowest; mainly for testing and compatibility.",
+            "Words, whitespace runs and punctuation become separate undo steps.",
+            "Each logical line (including its line ending) becomes one undo step.",
+            "Language-aware lexical chunking: indentation, strings, comments, numbers, operators and identifiers become sensible undo steps."
+          ],
+          "default": "smart",
+          "description": "How inserted text is split into undoable units."
+        },
+        "humanType.speed": {
+          "type": "string",
+          "enum": [
+            "instant",
+            "fast",
+            "normal",
+            "slow",
+            "custom"
+          ],
+          "enumDescriptions": [
+            "No artificial delay between chunks (undo granularity is still preserved).",
+            "~5 ms between chunks.",
+            "~20 ms between chunks.",
+            "~60 ms between chunks.",
+            "Use the value of humanType.delay."
+          ],
+          "default": "fast",
+          "description": "How fast chunks are inserted. Speed is independent of undo granularity (humanType.mode)."
+        },
+        "humanType.delay": {
+          "type": "number",
+          "default": 15,
+          "minimum": 0,
+          "maximum": 2000,
+          "description": "Delay in milliseconds between chunks. Only used when humanType.speed is \"custom\"."
+        },
+        "humanType.smartChunking": {
+          "type": "boolean",
+          "default": true,
+          "description": "In Smart mode, apply language-specific refinements (comment/string syntax, multi-character operators) based on the document language. When disabled, Smart mode uses generic lexical rules for every language."
+        },
+        "humanType.showProgress": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a cancellable status bar item while an insertion is running."
+        },
+        "humanType.replaceSelection": {
+          "type": "boolean",
+          "default": true,
+          "description": "When the editor has a non-empty selection, replace it (normal editor paste semantics). When disabled, insert at the end of the selection instead."
+        },
+        "humanType.maxChunks": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 1,
+          "maximum": 100000,
+          "description": "Safety limit on the number of undo steps for a single insertion. If chunking produces more chunks than this, adjacent chunks are merged so the count fits. Protects against freezing VS Code and against overflowing the undo stack on very large inputs."
+        },
+        "humanType.largeInputThreshold": {
+          "type": "number",
+          "default": 102400,
+          "minimum": 0,
+          "description": "Input size in characters above which Human Type asks for confirmation before inserting. Set to 0 to disable the confirmation."
+        },
+        "humanType.followInsertionPoint": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scroll the editor to keep the insertion point visible, and re-sync the caret to it after every chunk. Note: the caret follows inserted text either way - that is VS Code's own editing behaviour - so turning this off only stops the scrolling and the re-sync."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src test --ext .ts",
+    "test:unit": "npm run compile && mocha \"out/test/unit/**/*.test.js\"",
+    "test:integration": "npm run compile && vscode-test",
+    "test": "npm run compile && npm run lint && npm run test:unit && npm run test:integration",
+    "icon": "node scripts/generate-icon.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
+    "eslint": "^8.57.1",
+    "mocha": "^10.8.2",
+    "typescript": "^5.7.2"
+  }
+}

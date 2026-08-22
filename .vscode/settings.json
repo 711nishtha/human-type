@@ -1,0 +1,9 @@
+{
+  "files.trimTrailingWhitespace": false,
+  "search.exclude": {
+    "out": true,
+    ".vscode-test": true
+  },
+  "typescript.tsc.autoDetect": "off",
+  "editor.formatOnSave": false
+}

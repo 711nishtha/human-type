@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ['20.x']
+        include:
+          - os: ubuntu-latest
+            node: '22.x'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fails the build on any TypeScript error.
+      - name: Compile
+        run: npm run compile
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      # The integration suite drives a real VS Code instance, which needs a display.
+      - name: Integration tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run test:integration
+
+      - name: Integration tests (Windows / macOS)
+        if: runner.os != 'Linux'
+        run: npm run test:integration
+
+  package:
+    name: Package VSIX
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+
+      - run: npm ci
+
+      # Verifies the extension packages cleanly. It is NOT published - publishing to the
+      # Marketplace is a deliberate manual step, see the README.
+      - name: Package
+        run: npx @vscode/vsce package --out human-type.vsix
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: human-type-vsix
+          path: human-type.vsix
+          if-no-files-found: error

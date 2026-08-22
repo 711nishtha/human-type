@@ -1,0 +1,11 @@
+# Normalise to LF in the repository. Working copies are checked out with whatever
+# core.autocrlf dictates, but what is committed is always LF.
+* text=auto eol=lf
+
+# Binary: never touched.
+*.png binary
+*.vsix binary
+
+# Test fixtures must survive byte-for-byte. This project's whole subject is line-ending
+# correctness, so Git must not rewrite them on checkout or commit.
+test/fixtures/** -text

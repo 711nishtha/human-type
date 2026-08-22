@@ -1,0 +1,11 @@
+ASCII: the quick brown fox
+Accents: café, naïve, Ærø, Straße
+Combining: e + acute = é
+CJK: 你好世界 こんにちは 안녕하세요
+RTL: مرحبا بالعالم
+Emoji: 🌍 🚀 🎉
+ZWJ sequences: 👩‍💻 👨‍👩‍👧‍👦 🏳️‍🌈
+Skin tones: 👋🏽 👍🏿
+Math: ∑ ∫ √ ≠ ≤ ∞
+Box drawing: ┌───┬───┐
+Tabs:	after a tab
