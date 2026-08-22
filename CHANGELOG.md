@@ -5,6 +5,25 @@ All notable changes to Human Type are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-22
+
+### Added
+
+- **`Ctrl+Alt+V` (`Cmd+Alt+V` on macOS) as a default keybinding** for Insert Clipboard.
+  Previously the command was Command-Palette-only and a shortcut had to be configured by
+  hand, which meant redoing it on every machine. `Ctrl+Alt+V` is unbound in stock VS Code,
+  so nothing is taken away by installing.
+- An integration test asserting both default keybindings are contributed, and that neither
+  <kbd>Ctrl</kbd>+<kbd>V</kbd> nor <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> is ever
+  rebound. Normal paste stays normal paste.
+
+### Changed
+
+- Releases now also carry an unversioned `human-type.vsix` asset, so
+  `releases/latest/download/human-type.vsix` is a permanent install URL that does not
+  change between versions.
+- README install instructions lead with that URL rather than a version-pinned filename.
+
 ## [0.1.0] - 2026-08-22
 
 First release: a complete, tested MVP.
@@ -72,4 +91,5 @@ First release: a complete, tested MVP.
 - Proprietary. Copyright (c) 2026 Nishtha Sharma. All rights reserved. Free to install
   and use; see [LICENSE](LICENSE) for the full terms.
 
+[0.2.0]: https://github.com/711nishtha/human-type/releases/tag/v0.2.0
 [0.1.0]: https://github.com/711nishtha/human-type/releases/tag/v0.1.0

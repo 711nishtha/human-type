@@ -163,17 +163,25 @@ finding 3.
 
 ## Install
 
-This extension is not on the Marketplace and is not intended for it. Build the VSIX and
-install it into your own VS Code:
+Not on the Marketplace and not intended for it. Download the VSIX from the
+[latest release](https://github.com/711nishtha/human-type/releases/latest) and install it.
+This URL always points at the newest build, so it never needs updating:
+
+```bash
+curl -L -o human-type.vsix https://github.com/711nishtha/human-type/releases/latest/download/human-type.vsix
+code --install-extension human-type.vsix
+```
+
+Then reload VS Code. <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd> works immediately — the
+keybinding ships with the extension, so there is nothing to configure on a new machine.
+
+Building it yourself instead:
 
 ```bash
 npm install
-npm run package                                   # -> human-type-0.1.0.vsix
-code --install-extension human-type-0.1.0.vsix
+npm run package                 # -> human-type-0.2.0.vsix
+code --install-extension human-type-0.2.0.vsix
 ```
-
-Or install the `.vsix` from the [latest release](https://github.com/711nishtha/human-type/releases/latest):
-**Extensions** view -> **...** menu -> **Install from VSIX...**
 
 To remove it: `code --uninstall-extension 711nishtha.human-type`
 
@@ -183,29 +191,28 @@ To remove it: `code --uninstall-extension 711nishtha.human-type`
 
 1. Copy the code or text you want.
 2. Put your cursor where it should go.
-3. Run **Human Type: Insert Clipboard** from the Command Palette
-   (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>).
+3. Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd> — or run **Human Type: Insert
+   Clipboard** from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>).
 
 That is the whole workflow.
 
-### Keyboard shortcut
+### Keyboard shortcuts
 
-**Human Type ships with no insertion keybinding by default**, deliberately: it will not
-take over <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>
-behind your back. To bind it yourself, open **Preferences: Open Keyboard Shortcuts (JSON)**
-and add:
+| Shortcut | Does |
+| --- | --- |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd> (<kbd>Cmd</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd> on macOS) | Insert Clipboard |
+| <kbd>Esc</kbd> | Cancel the running insertion |
 
-```jsonc
-{
-  "key": "ctrl+shift+v",
-  "command": "humanType.insertClipboard",
-  "when": "editorTextFocus"
-}
-```
+`Ctrl+Alt+V` was chosen because VS Code leaves it unbound, so installing Human Type does
+not take anything away from you. **Normal paste is untouched** — <kbd>Ctrl</kbd>+<kbd>V</kbd>
+and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> behave exactly as they always did.
 
-The only keybinding the extension does contribute is <kbd>Esc</kbd> to cancel, and it is
-active *only* while an insertion is running (`when: "humanType.inserting"`), so it never
-interferes with normal editing.
+The <kbd>Esc</kbd> binding is scoped to `humanType.inserting`, so it is inert unless an
+insertion is actually running — it never interferes with dismissing suggestions or exiting
+multi-cursor mode.
+
+To use a different key, open **Preferences: Open Keyboard Shortcuts**, search for
+`Human Type`, and rebind it there.
 
 ---
 
@@ -394,7 +401,7 @@ so the claim is checkable in the source rather than merely asserted.
 
 ## Limitations
 
-Known and deliberate, as of 0.1.0:
+Known and deliberate, as of 0.2.0:
 
 - **Multi-cursor is not supported.** With several cursors active, Human Type asks before
   proceeding and then uses the primary cursor only. Keeping every caret and its undo steps
@@ -515,7 +522,7 @@ see [`docs/MANUAL-TESTS.md`](docs/MANUAL-TESTS.md).
 ## Building a VSIX
 
 ```bash
-npm run package     # runs vsce package -> human-type-0.1.0.vsix
+npm run package     # runs vsce package -> human-type-0.2.0.vsix
 ```
 
 `npx vsce ls` prints exactly which files will be included, which is worth a glance after
@@ -526,15 +533,17 @@ dependencies.
 
 ## Versioning and roadmap
 
-[Semantic Versioning](https://semver.org/), starting at **0.1.0** — a complete, tested MVP,
-with `0.x` signalling that the settings surface may still change.
+[Semantic Versioning](https://semver.org/). `0.x` signals that the settings surface may
+still change.
 
-| Version | Focus |
+| Version | Shipped |
 | --- | --- |
-| **0.1.0** | Four modes, six commands, native undo, full test suite |
-| 0.2.0 | Smart-mode improvements: better statement grouping, more languages |
-| 0.3.0 | UI: status-bar mode picker, multi-line input panel, chunk preview |
-| 0.4.0 | Multi-cursor, if it can be made genuinely reliable |
+| **0.2.0** | `Ctrl+Alt+V` as a default keybinding, so a fresh install needs no setup |
+| 0.1.0 | Four modes, six commands, native undo, full test suite |
+
+Planned, in no fixed order: better statement grouping in Smart mode, more languages, a
+status-bar mode picker, a multi-line input panel, and multi-cursor support if it can be
+made genuinely reliable.
 
 ---
 

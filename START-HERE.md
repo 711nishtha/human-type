@@ -50,11 +50,19 @@ git push
 ## 5. Install it into your own VS Code
 
 ```bash
-npm run package                                   # -> human-type-0.1.0.vsix
-code --install-extension human-type-0.1.0.vsix
+npm run package                                   # -> human-type-0.2.0.vsix
+code --install-extension human-type-0.2.0.vsix
 ```
 
-Reload VS Code and the six **Human Type** commands appear in the Command Palette.
+Reload VS Code. The six **Human Type** commands appear in the Command Palette, and
+<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd> inserts the clipboard straight away.
+
+On another machine, skip the build entirely:
+
+```bash
+curl -L -o human-type.vsix https://github.com/711nishtha/human-type/releases/latest/download/human-type.vsix
+code --install-extension human-type.vsix
+```
 
 ---
 

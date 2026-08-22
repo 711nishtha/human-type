@@ -62,6 +62,31 @@ suite('commands', () => {
     assert.deepStrictEqual([...contributed].sort(), [...ALL_COMMANDS].sort());
   });
 
+  test('the default keybindings are contributed', () => {
+    // The README promises Ctrl+Alt+V out of the box and promises that normal paste is
+    // untouched. Both are package.json contributions, so assert them rather than trust
+    // that nobody edited the manifest.
+    const ext = vscode.extensions.all.find((e) => e.packageJSON?.name === 'human-type');
+    const bindings: { command: string; key: string; mac?: string; when?: string }[] =
+      ext?.packageJSON.contributes.keybindings ?? [];
+
+    const insert = bindings.find((b) => b.command === 'humanType.insertClipboard');
+    assert.ok(insert, 'no default keybinding for humanType.insertClipboard');
+    assert.strictEqual(insert.key, 'ctrl+alt+v');
+    assert.strictEqual(insert.mac, 'cmd+alt+v');
+
+    const cancel = bindings.find((b) => b.command === 'humanType.cancel');
+    assert.ok(cancel, 'no default keybinding for humanType.cancel');
+    assert.strictEqual(cancel.key, 'escape');
+    assert.match(cancel.when ?? '', /humanType\.inserting/);
+
+    // Human Type must never take over normal paste.
+    for (const b of bindings) {
+      assert.notStrictEqual(b.key, 'ctrl+v', 'Human Type must not rebind Ctrl+V');
+      assert.notStrictEqual(b.key, 'ctrl+shift+v', 'Human Type must not rebind Ctrl+Shift+V');
+    }
+  });
+
   test('Insert Clipboard inserts the clipboard contents', async () => {
     const editor = await openDoc('');
     await vscode.env.clipboard.writeText('clip board text');
