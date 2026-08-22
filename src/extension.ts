@@ -276,7 +276,7 @@ function requireEditor(): vscode.TextEditor | undefined {
 
 function currentExtensionUri(): vscode.Uri {
   const ext =
-    vscode.extensions.getExtension('your-publisher-id.human-type') ??
+    vscode.extensions.getExtension('711nishtha.human-type') ??
     vscode.extensions.all.find((e) => e.packageJSON?.name === 'human-type');
   if (!ext) {
     throw new Error('Human Type: could not locate the extension installation directory.');

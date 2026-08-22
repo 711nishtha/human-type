@@ -30,59 +30,31 @@ npm test
 Compile → lint → 247 unit tests → 67 integration tests against a real VS Code instance.
 Takes about a minute. This is exactly what CI runs.
 
-## 3. Replace the last placeholder
+## 3. Everything is already configured
 
-One value remains, needed only to publish to the Marketplace:
+Publisher, repository URLs and copyright are all set. There are no placeholders left to
+fill in.
 
-```bash
-grep -rn "your-publisher-id" --include="*.json" --include="*.ts" . | grep -v node_modules
-```
+## 4. Day-to-day Git
 
-| Placeholder | Where | What it should become |
-| --- | --- | --- |
-| `your-publisher-id` | `package.json` -> `publisher` | Your Marketplace publisher ID (**required** to publish) |
-| `your-publisher-id` | `src/extension.ts` -> `currentExtensionUri()` | The same ID (optional - there is a working fallback) |
-
-Already set for you: the repository URLs point at
-<https://github.com/711nishtha/human-type>, and the copyright holder is **Nishtha Sharma**
-in `LICENSE`, `package.json`, and the header of every source file.
-
-Set your git identity before committing:
+The repo is <https://github.com/711nishtha/human-type>, `origin/main` is already
+configured, and CI runs on every push (compile, lint, both test suites on Linux, Windows
+and macOS).
 
 ```bash
-git config user.name "Nishtha Sharma"
-git config user.email "your@email.com"
+git add -A
+git commit -m "your message"
+git push
 ```
 
-Check that `human-type` is still free on the Marketplace before publishing:
-<https://marketplace.visualstudio.com/search?term=human%20type>. If it is taken, change
-`name` in `package.json` (`displayName` does not need to be unique).
-
-## 4. Push to GitHub
-
-A local repository already exists on `main` with one clean commit. Nothing has been
-pushed.
-
-```bash
-git remote add origin https://github.com/711nishtha/human-type
-git push -u origin main
-```
-
-CI starts on the first push: compile, lint, and both test suites on Linux, Windows and
-macOS, plus a VSIX packaging check. It does **not** publish anything.
-
-## 5. Ship a VSIX
+## 5. Install it into your own VS Code
 
 ```bash
 npm run package                                   # -> human-type-0.1.0.vsix
-code --install-extension human-type-0.1.0.vsix    # try it in your real editor
+code --install-extension human-type-0.1.0.vsix
 ```
 
-## 6. Publish to the Marketplace
-
-Follow the README's [publishing section](README.md#how-to-publish-to-the-vs-code-marketplace).
-It deliberately links to Microsoft's live documentation for the authentication step,
-because that is the part Microsoft changes.
+Reload VS Code and the six **Human Type** commands appear in the Command Palette.
 
 ---
 

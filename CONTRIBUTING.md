@@ -3,11 +3,11 @@
 Human Type is **proprietary software**. Copyright © 2026 Nishtha Sharma. All rights
 reserved.
 
-The source is published for transparency, evaluation, and security review. It is not open
+This is a personal project kept on GitHub for version history and backup. It is not open
 source, and the [LICENSE](LICENSE) does not grant rights to fork, modify, or redistribute
 it.
 
-That said, contributions are welcome on the terms below.
+If you have been given access and want to propose a change, the terms below apply.
 
 ## Before you write any code
 

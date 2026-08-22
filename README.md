@@ -161,19 +161,21 @@ finding 3.
 
 ---
 
-## Installation
+## Install
 
-### From a VSIX
+This extension is not on the Marketplace and is not intended for it. Build the VSIX and
+install it into your own VS Code:
 
 ```bash
+npm install
+npm run package                                   # -> human-type-0.1.0.vsix
 code --install-extension human-type-0.1.0.vsix
 ```
 
-Or: **Extensions** view → **…** menu → **Install from VSIX…**
+Or install the `.vsix` from the [latest release](https://github.com/711nishtha/human-type/releases/latest):
+**Extensions** view -> **...** menu -> **Install from VSIX...**
 
-### From the Marketplace
-
-Not yet published. See [Publishing](#how-to-publish-to-the-vs-code-marketplace).
+To remove it: `code --uninstall-extension 711nishtha.human-type`
 
 ---
 
@@ -385,9 +387,8 @@ Human Type is **local only**.
 - Smart mode's language awareness is a static table compiled into the extension. No model,
   no service.
 
-You can verify this yourself — that is part of why the source is published. The extension
-has zero runtime dependencies and `src/` is about 1,900 lines of TypeScript, so the claim
-is checkable rather than merely asserted.
+The extension has zero runtime dependencies and `src/` is about 1,900 lines of TypeScript,
+so the claim is checkable in the source rather than merely asserted.
 
 ---
 
@@ -511,164 +512,47 @@ see [`docs/MANUAL-TESTS.md`](docs/MANUAL-TESTS.md).
 
 ---
 
-## Packaging a VSIX
+## Building a VSIX
 
 ```bash
-npm install --global @vscode/vsce
-npm run compile
-vsce package
+npm run package     # runs vsce package -> human-type-0.1.0.vsix
 ```
 
-This produces `human-type-0.1.0.vsix`.
-
-Useful checks before shipping:
-
-```bash
-vsce ls        # exactly which files will be included
-vsce package   # fails on missing icon, bad repository field, etc.
-```
-
-Install it locally:
-
-```bash
-code --install-extension human-type-0.1.0.vsix
-```
-
-Or **Extensions** → **…** → **Install from VSIX…**. Uninstall with
-`code --uninstall-extension your-publisher-id.human-type`.
-
-> **Before packaging you must replace `your-publisher-id`** in `package.json` — see
-> [Placeholders](#placeholders-you-must-replace).
+`npx vsce ls` prints exactly which files will be included, which is worth a glance after
+changing `.vscodeignore`. The packaged extension is ~50 KB and has no runtime
+dependencies.
 
 ---
 
-## Publishing to GitHub
+## Versioning and roadmap
 
-```bash
-git init
-git add .
-git commit -m "Initial release"
-git branch -M main
-git remote add origin https://github.com/711nishtha/human-type
-git push -u origin main
-```
-
-`.gitignore` already excludes `node_modules/`, `out/`, `dist/`, `*.vsix`, `.env`,
-credentials, tokens and local test artefacts.
-
-CI runs on every push and pull request: `npm ci`, `npm run compile`, `npm run lint`,
-`npm run test:unit`, and the integration suite under `xvfb` on Linux. It fails on
-TypeScript errors, lint errors and failing tests. It does **not** publish to the
-Marketplace.
-
----
-
-## How to publish to the VS Code Marketplace
-
-Microsoft changes the authentication requirements for this periodically, so follow the
-official documentation rather than any hardcoded steps:
-
-**<https://code.visualstudio.com/api/working-with-extensions/publishing-extension>**
-
-The shape of the process:
-
-1. **Sign in to a Microsoft account.**
-2. **Create an Azure DevOps organisation** — the Marketplace uses it for identity.
-   <https://dev.azure.com/>
-3. **Create the authentication credential** the current documentation calls for (a Personal
-   Access Token scoped to **Marketplace → Manage**, with **All accessible organizations**
-   selected, at the time of writing). Follow the live docs — this is the part that changes.
-4. **Create a Marketplace publisher** at
-   <https://marketplace.visualstudio.com/manage>. The publisher ID you choose is what goes
-   into `package.json`.
-5. **Set `publisher` in `package.json`** to that ID, replacing `your-publisher-id`.
-6. **Authenticate `vsce`:**
-   ```bash
-   vsce login <your-publisher-id>
-   ```
-7. **Publish:**
-   ```bash
-   vsce publish
-   # or bump and publish in one step:
-   vsce publish minor
-   ```
-
-### Manual publishing
-
-If you would rather not give `vsce` a token:
-
-```bash
-vsce package
-```
-
-then upload the `.vsix` at <https://marketplace.visualstudio.com/manage> → your publisher
-→ **New extension** → **Visual Studio Code**.
-
-### Before you publish
-
-- The Marketplace requires a **globally unique** extension name. `human-type` may already
-  be taken — check <https://marketplace.visualstudio.com/search?term=human%20type> and
-  change `name` in `package.json` if needed. The `displayName` does not have to be unique.
-- Replace every placeholder listed below.
-- Run `vsce package` and `vsce ls` and read the file list.
-
----
-
-## Placeholders you must replace
-
-One value remains, and it is only needed to publish to the Marketplace:
-
-| Placeholder | File | Replace with |
-| --- | --- | --- |
-| `your-publisher-id` | `package.json` -> `publisher` | Your Marketplace publisher ID |
-| `your-publisher-id` | `src/extension.ts` -> `currentExtensionUri()` | The same ID (there is a working fallback, so this one is optional) |
-
-Find it with:
-
-```bash
-grep -rn "your-publisher-id" --include="*.json" --include="*.ts" . | grep -v node_modules
-```
-
-Repository URLs and the copyright holder are already set.
-
----
-
-## Versioning
-
-[Semantic Versioning](https://semver.org/). Starting at **0.1.0**, not 0.0.1: this is a
-complete, tested, usable MVP rather than a first sketch, and `0.x` signals that the
-settings surface may still change before 1.0.
-
-Roadmap:
+[Semantic Versioning](https://semver.org/), starting at **0.1.0** — a complete, tested MVP,
+with `0.x` signalling that the settings surface may still change.
 
 | Version | Focus |
 | --- | --- |
-| **0.1.0** | Usable MVP — four modes, four commands + cancel, native undo, full test suite |
-| 0.2.0 | Smart-mode improvements: better statement grouping, more languages, per-chunk-type pacing |
-| 0.3.0 | UI: mode picker in the status bar, a multi-line input panel, a chunk preview |
-| 0.4.0 | Multi-cursor support, if it can be made genuinely reliable |
-| 1.0.0 | Stable settings surface, Marketplace release |
+| **0.1.0** | Four modes, six commands, native undo, full test suite |
+| 0.2.0 | Smart-mode improvements: better statement grouping, more languages |
+| 0.3.0 | UI: status-bar mode picker, multi-line input panel, chunk preview |
+| 0.4.0 | Multi-cursor, if it can be made genuinely reliable |
 
 ---
 
 ## Related work
 
-**[Paste Letter by Letter](https://marketplace.visualstudio.com/search?term=paste%20letter%20by%20letter)**
-is an existing extension that inserts clipboard content character by character to give
-granular undo. The core idea is not new, and this project does not claim otherwise. Human
-Type was written from scratch and adds word / line / smart granularity, language awareness,
-speed decoupled from granularity, cancellation, progress reporting, content-integrity
-verification, configuration, and a test suite.
+*Paste Letter by Letter* is an existing VS Code extension that inserts clipboard content
+character by character for granular undo. The core idea is not new and this project does
+not claim otherwise. Human Type was written from scratch and adds word / line / smart
+granularity, language awareness, speed decoupled from granularity, cancellation, progress,
+content-integrity verification and a test suite.
 
 ---
 
 ## Contributing
 
-Bug reports and feature requests are welcome — see [SUPPORT.md](SUPPORT.md).
-
-This is proprietary software, so code contributions are accepted only under the terms in
-[CONTRIBUTING.md](CONTRIBUTING.md): contributions are assigned to the copyright holder.
-Please open an issue to discuss a change before writing code.
+This is a personal, proprietary project. If you have been given access and want to
+propose a change, open an issue first — see [CONTRIBUTING.md](CONTRIBUTING.md) for the
+terms that apply to contributions.
 
 ---
 
@@ -686,10 +570,6 @@ Human Type is proprietary software, licensed — not sold — under the terms in
 [LICENSE](LICENSE). It is free to install and free to use, for personal and commercial
 work alike.
 
-The source is published here for transparency, evaluation, and security review. Public
-visibility does **not** make it open source: copying, modifying, redistributing, or
-republishing it to any marketplace or registry is not permitted without written
-permission from the copyright holder.
-
-For licensing enquiries beyond the scope of that agreement, contact the copyright
-holder.
+This is not open source. Access to the source does not grant rights to copy, modify,
+redistribute, or republish it to any marketplace or registry without written permission
+from the copyright holder.

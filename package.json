@@ -3,13 +3,12 @@
   "displayName": "Human Type",
   "description": "Granular, human-like text insertion for VS Code. AI writes the code. You control how it enters your editor.",
   "version": "0.1.0",
-  "publisher": "your-publisher-id",
+  "publisher": "711nishtha",
   "author": {
     "name": "Nishtha Sharma"
   },
   "license": "SEE LICENSE IN LICENSE",
   "icon": "icon.png",
-  "pricing": "Free",
   "engines": {
     "vscode": "^1.85.0"
   },
