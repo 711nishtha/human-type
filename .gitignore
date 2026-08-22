@@ -16,3 +16,6 @@ Thumbs.db
 coverage/
 tmp/
 .tmp/
+
+# Scratch files used when drafting releases.
+.release-notes.md
