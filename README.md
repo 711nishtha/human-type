@@ -380,8 +380,9 @@ Human Type is **local only**.
 - Smart mode's language awareness is a static table compiled into the extension. No model,
   no service.
 
-You can verify this: the extension has zero runtime dependencies, and `src/` is about 1,200
-lines of TypeScript.
+You can verify this yourself — that is part of why the source is published. The extension
+has zero runtime dependencies and `src/` is about 1,900 lines of TypeScript, so the claim
+is checkable rather than merely asserted.
 
 ---
 
@@ -617,13 +618,12 @@ Everything you need to change before publishing, in one place:
 | `your-publisher-id` | `package.json` → `publisher` | Your Marketplace publisher ID |
 | `your-publisher-id` | `src/extension.ts` → `currentExtensionUri()` | The same ID (there is a fallback, so this one is optional) |
 | `YOUR_GITHUB_USERNAME` | `package.json` → `repository`, `bugs`, `homepage` | Your GitHub username |
-| `YOUR_NAME` | `LICENSE` | The copyright holder's name |
 | `<REPOSITORY_URL>` | `README.md`, `SUPPORT.md` | Your repository URL |
 
 Find them all with:
 
 ```bash
-grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|YOUR_NAME\|<REPOSITORY_URL>" \
+grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|<REPOSITORY_URL>" \
   --include="*.json" --include="*.ts" --include="*.md" .
 ```
 
@@ -660,10 +660,11 @@ verification, configuration, and a test suite.
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Bug reports and feature requests are welcome — see [SUPPORT.md](SUPPORT.md).
 
-The one hard rule: **any change that touches chunking or insertion must keep the content
-integrity tests passing.** If you add a mode or a language, add a round-trip test for it.
+This is proprietary software, so code contributions are accepted only under the terms in
+[CONTRIBUTING.md](CONTRIBUTING.md): contributions are assigned to the copyright holder.
+Please open an issue to discuss a change before writing code.
 
 ---
 
@@ -675,4 +676,16 @@ See [SUPPORT.md](SUPPORT.md).
 
 ## License
 
-[MIT](LICENSE).
+**Copyright © 2026 Nishtha Sharma. All rights reserved.**
+
+Human Type is proprietary software, licensed — not sold — under the terms in
+[LICENSE](LICENSE). It is free to install and free to use, for personal and commercial
+work alike.
+
+The source is published here for transparency, evaluation, and security review. Public
+visibility does **not** make it open source: copying, modifying, redistributing, or
+republishing it to any marketplace or registry is not permitted without written
+permission from the copyright holder.
+
+For licensing enquiries beyond the scope of that agreement, contact the copyright
+holder.

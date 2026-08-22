@@ -35,7 +35,7 @@ Takes about a minute. This is exactly what CI runs.
 Nothing ships until these are real values:
 
 ```bash
-grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|YOUR_NAME\|<REPOSITORY_URL>" \
+grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|<REPOSITORY_URL>" \
   --include="*.json" --include="*.ts" --include="*.md" . | grep -v node_modules
 ```
 
@@ -44,13 +44,16 @@ grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|YOUR_NAME\|<REPOSITORY_URL>" 
 | `your-publisher-id` | `package.json` → `publisher` | Your Marketplace publisher ID (**required** to publish) |
 | `your-publisher-id` | `src/extension.ts` → `currentExtensionUri()` | The same ID (optional — there is a working fallback) |
 | `YOUR_GITHUB_USERNAME` | `package.json` → `repository`, `bugs`, `homepage`; `CHANGELOG.md` | Your GitHub username |
-| `YOUR_NAME` | `LICENSE` | The copyright holder |
 | `<REPOSITORY_URL>` | `README.md`, `SUPPORT.md` | Your repository URL |
 
-Also set your git identity — the initial commit used a placeholder name:
+The copyright holder is already set to **Nishtha Sharma** in `LICENSE`, `package.json`,
+and the header of every source file. Nothing to change there.
+
+Set your git identity before committing:
 
 ```bash
-git config user.name "Your Real Name"
+git config user.name "Nishtha Sharma"
+git config user.email "your@email.com"
 ```
 
 Check that `human-type` is still free on the Marketplace before publishing:

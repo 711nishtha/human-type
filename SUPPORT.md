@@ -58,3 +58,11 @@ roadmap in the README shows what is already planned.
 
 If you believe you have found a security issue, please open an issue marked `[security]`
 rather than posting exploit details publicly first.
+
+## License
+
+Human Type is proprietary software. Copyright (c) 2026 Nishtha Sharma. All rights
+reserved. It is free to install and use; see [LICENSE](LICENSE) for the terms.
+
+For permissions beyond that agreement — redistribution, bundling, or commercial
+relicensing — contact the copyright holder.

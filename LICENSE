@@ -1,21 +1,89 @@
-MIT License
+Human Type — Proprietary Software License Agreement
 
-Copyright (c) 2026 YOUR_NAME
+Copyright (c) 2026 Nishtha Sharma. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software and its source code (the "Software") are the exclusive property of
+Nishtha Sharma (the "Licensor") and are protected by copyright law and international
+treaties.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The Software is made publicly viewable for transparency and evaluation. Public
+visibility of the source code does NOT place it in the public domain and does NOT grant
+any open-source rights.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. GRANT OF LICENSE
+
+   Subject to the terms below, the Licensor grants you a personal, non-exclusive,
+   non-transferable, revocable licence to:
+
+   (a) install and use the Software on any number of devices you own or control, for
+       personal or commercial purposes; and
+
+   (b) view the source code for the purposes of evaluation, security review, and
+       interoperability.
+
+2. RESTRICTIONS
+
+   Except as expressly permitted in Section 1, or by written permission from the
+   Licensor, you may NOT:
+
+   (a) copy, reproduce, or redistribute the Software or its source code, in whole or in
+       part, in any form;
+
+   (b) modify, adapt, translate, or create derivative works based on the Software;
+
+   (c) sell, rent, lease, sublicense, lend, or otherwise transfer the Software or any
+       rights in it;
+
+   (d) publish, host, or make the Software available to third parties, including
+       republishing it to any extension marketplace, package registry, or distribution
+       channel;
+
+   (e) remove, obscure, or alter any copyright, trademark, or other proprietary notice
+       contained in the Software; or
+
+   (f) use the name "Human Type" or the Licensor's name to endorse or promote products
+       derived from the Software.
+
+3. CONTRIBUTIONS
+
+   By submitting any contribution to the Software (including code, documentation, or
+   other material) you assign to the Licensor all right, title, and interest in that
+   contribution, and confirm that you have the right to do so. Contributions become the
+   property of the Licensor and are licensed under these terms.
+
+4. OWNERSHIP
+
+   The Software is licensed, not sold. The Licensor retains all right, title, and
+   interest in and to the Software, including all intellectual property rights. No
+   rights are granted other than those expressly stated in this Agreement.
+
+5. PRIVACY
+
+   The Software operates entirely locally. It transmits no data, collects no telemetry,
+   and makes no network requests. The Licensor receives no information about your use of
+   the Software.
+
+6. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+7. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
+   WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. THIS
+   INCLUDES, WITHOUT LIMITATION, ANY LOSS OR CORRUPTION OF DATA OR SOURCE CODE.
+
+8. TERMINATION
+
+   This licence terminates automatically if you breach any of its terms. On termination
+   you must cease all use of the Software and destroy all copies in your possession.
+
+9. RESERVATION OF RIGHTS
+
+   All rights not expressly granted in this Agreement are reserved by the Licensor.
+
+For licensing enquiries, permissions beyond the scope of this Agreement, or commercial
+redistribution rights, contact the Licensor.

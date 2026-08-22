@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+/*!
+ * Human Type - Granular, human-like text insertion for VS Code.
+ * Copyright (c) 2026 Nishtha Sharma. All rights reserved.
+ * Licensed under the terms in LICENSE. Redistribution is not permitted.
+ */
 /**
  * Generates icon.png from code - no binary assets, no third-party artwork, nothing to
  * license. Run with `npm run icon` after changing the design below.

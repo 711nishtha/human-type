@@ -1,3 +1,8 @@
+/*!
+ * Human Type - Granular, human-like text insertion for VS Code.
+ * Copyright (c) 2026 Nishtha Sharma. All rights reserved.
+ * Licensed under the terms in LICENSE. Redistribution is not permitted.
+ */
 /**
  * Reads and validates the `humanType.*` settings.
  *

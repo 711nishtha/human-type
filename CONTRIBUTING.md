@@ -1,7 +1,37 @@
 # Contributing to Human Type
 
-Thanks for your interest. This document covers what you need to know to make a change
-that will be accepted.
+Human Type is **proprietary software**. Copyright © 2026 Nishtha Sharma. All rights
+reserved.
+
+The source is published for transparency, evaluation, and security review. It is not open
+source, and the [LICENSE](LICENSE) does not grant rights to fork, modify, or redistribute
+it.
+
+That said, contributions are welcome on the terms below.
+
+## Before you write any code
+
+**Open an issue first.** Describe the problem or the change you have in mind and wait for
+a reply. Unsolicited pull requests may be declined regardless of quality, simply because
+the change does not fit the roadmap — and nobody enjoys that outcome.
+
+Bug reports and feature requests need no permission at all. See [SUPPORT.md](SUPPORT.md).
+
+## Contributor terms
+
+By submitting a pull request, patch, or any other contribution, you agree that:
+
+1. You assign to Nishtha Sharma all right, title, and interest in your contribution,
+   including all copyright and related rights.
+2. You have the legal right to make that assignment — the work is yours, and it is not
+   encumbered by an employer agreement or a third-party licence.
+3. Your contribution contains no code copied from another project, unless you say so
+   explicitly in the pull request and the licence permits it.
+4. Your contribution is provided without warranty.
+
+This is stated in Section 3 of the [LICENSE](LICENSE). If you cannot agree to it, please
+open an issue describing the fix instead of sending code — a clear bug report is genuinely
+just as valuable.
 
 ## Getting set up
 
@@ -11,8 +41,8 @@ npm run compile
 npm test
 ```
 
-`npm test` is the same command CI runs: compile, lint, unit tests, integration tests. It
-must pass before a pull request can be merged.
+`npm test` is exactly what CI runs: compile, lint, unit tests, integration tests. It must
+pass before anything can be merged.
 
 Press <kbd>F5</kbd> in VS Code to launch an Extension Development Host with your build
 loaded.
@@ -22,7 +52,7 @@ loaded.
 **Human Type must never alter user content.**
 
 Any change touching `src/chunker.ts` or `src/insertionEngine.ts` must keep the content
-integrity tests green. Those tests round-trip 30 samples through all four modes and assert
+integrity tests green. Those tests round-trip 30+ samples through all four modes and assert
 byte equality. If you add a mode, a language, or a chunking heuristic, add a sample to
 `SAMPLES` in `test/unit/chunker.test.ts` — that single addition tests your change against
 every mode automatically.
@@ -37,7 +67,7 @@ with contiguous offsets, no gaps, no overlaps, and no empty chunks.
 
 ## Undo semantics
 
-If you change how edits are applied, re-read [`docs/UNDO-BEHAVIOR.md`](docs/UNDO-BEHAVIOR.md)
+If you change how edits are applied, read [`docs/UNDO-BEHAVIOR.md`](docs/UNDO-BEHAVIOR.md)
 first. It records measured behaviour, not assumptions, and
 `test/integration/poc.undo.test.ts` re-verifies it on every run.
 
@@ -63,6 +93,7 @@ Never remove the generic fallback. Unknown languages must keep working.
 
 - TypeScript, `strict` mode. No `any` without a comment explaining why.
 - `npm run lint` must pass.
+- Keep the copyright header at the top of every source file.
 - Comments explain *why*, not *what*. The existing code is the reference for tone and
   density.
 - Keep `src/extension.ts` free of editing and chunking logic — it is the command layer.
