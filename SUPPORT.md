@@ -8,7 +8,7 @@ not remove them one at a time, that is the bug — say so, and include your VS C
 
 ## Reporting a bug
 
-Open an issue at `<REPOSITORY_URL>/issues` and include:
+Open an issue at `https://github.com/711nishtha/human-type/issues` and include:
 
 1. **VS Code version** — Help → About, or `code --version`.
 2. **Operating system.**

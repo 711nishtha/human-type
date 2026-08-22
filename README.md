@@ -421,7 +421,7 @@ Known and deliberate, as of 0.1.0:
 ### Set up
 
 ```bash
-git clone <REPOSITORY_URL>
+git clone https://github.com/711nishtha/human-type
 cd human-type
 npm install
 ```
@@ -544,7 +544,7 @@ git init
 git add .
 git commit -m "Initial release"
 git branch -M main
-git remote add origin <REPOSITORY_URL>
+git remote add origin https://github.com/711nishtha/human-type
 git push -u origin main
 ```
 
@@ -611,21 +611,20 @@ then upload the `.vsix` at <https://marketplace.visualstudio.com/manage> → you
 
 ## Placeholders you must replace
 
-Everything you need to change before publishing, in one place:
+One value remains, and it is only needed to publish to the Marketplace:
 
 | Placeholder | File | Replace with |
 | --- | --- | --- |
-| `your-publisher-id` | `package.json` → `publisher` | Your Marketplace publisher ID |
-| `your-publisher-id` | `src/extension.ts` → `currentExtensionUri()` | The same ID (there is a fallback, so this one is optional) |
-| `YOUR_GITHUB_USERNAME` | `package.json` → `repository`, `bugs`, `homepage` | Your GitHub username |
-| `<REPOSITORY_URL>` | `README.md`, `SUPPORT.md` | Your repository URL |
+| `your-publisher-id` | `package.json` -> `publisher` | Your Marketplace publisher ID |
+| `your-publisher-id` | `src/extension.ts` -> `currentExtensionUri()` | The same ID (there is a working fallback, so this one is optional) |
 
-Find them all with:
+Find it with:
 
 ```bash
-grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|<REPOSITORY_URL>" \
-  --include="*.json" --include="*.ts" --include="*.md" .
+grep -rn "your-publisher-id" --include="*.json" --include="*.ts" . | grep -v node_modules
 ```
+
+Repository URLs and the copyright holder are already set.
 
 ---
 

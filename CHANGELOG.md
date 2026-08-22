@@ -66,4 +66,4 @@ First release: a complete, tested MVP.
 - Proprietary. Copyright (c) 2026 Nishtha Sharma. All rights reserved. Free to install
   and use; see [LICENSE](LICENSE) for the full terms.
 
-[0.1.0]: https://github.com/YOUR_GITHUB_USERNAME/human-type/releases/tag/v0.1.0
+[0.1.0]: https://github.com/711nishtha/human-type/releases/tag/v0.1.0

@@ -30,24 +30,22 @@ npm test
 Compile → lint → 239 unit tests → 67 integration tests against a real VS Code instance.
 Takes about a minute. This is exactly what CI runs.
 
-## 3. Replace the placeholders
+## 3. Replace the last placeholder
 
-Nothing ships until these are real values:
+One value remains, needed only to publish to the Marketplace:
 
 ```bash
-grep -rn "your-publisher-id\|YOUR_GITHUB_USERNAME\|<REPOSITORY_URL>" \
-  --include="*.json" --include="*.ts" --include="*.md" . | grep -v node_modules
+grep -rn "your-publisher-id" --include="*.json" --include="*.ts" . | grep -v node_modules
 ```
 
 | Placeholder | Where | What it should become |
 | --- | --- | --- |
-| `your-publisher-id` | `package.json` → `publisher` | Your Marketplace publisher ID (**required** to publish) |
-| `your-publisher-id` | `src/extension.ts` → `currentExtensionUri()` | The same ID (optional — there is a working fallback) |
-| `YOUR_GITHUB_USERNAME` | `package.json` → `repository`, `bugs`, `homepage`; `CHANGELOG.md` | Your GitHub username |
-| `<REPOSITORY_URL>` | `README.md`, `SUPPORT.md` | Your repository URL |
+| `your-publisher-id` | `package.json` -> `publisher` | Your Marketplace publisher ID (**required** to publish) |
+| `your-publisher-id` | `src/extension.ts` -> `currentExtensionUri()` | The same ID (optional - there is a working fallback) |
 
-The copyright holder is already set to **Nishtha Sharma** in `LICENSE`, `package.json`,
-and the header of every source file. Nothing to change there.
+Already set for you: the repository URLs point at
+<https://github.com/711nishtha/human-type>, and the copyright holder is **Nishtha Sharma**
+in `LICENSE`, `package.json`, and the header of every source file.
 
 Set your git identity before committing:
 
@@ -66,7 +64,7 @@ A local repository already exists on `main` with one clean commit. Nothing has b
 pushed.
 
 ```bash
-git remote add origin <REPOSITORY_URL>
+git remote add origin https://github.com/711nishtha/human-type
 git push -u origin main
 ```
 
