@@ -339,22 +339,23 @@ behaviour this extension exists to avoid.
 
 ## Performance
 
-Measured on Windows 11 x64, VS Code 1.134, with `maxChunks: 300`:
+Measured on Windows 11 x64, VS Code 1.134, with `maxChunks: 300`, across several runs:
 
 | Input | Chunks | Time | Rate |
 | --- | --- | --- | --- |
-| 1 KB | 276 | 1.0 s | ~285 chunks/s |
-| 10 KB | 292 | 1.0 s | ~279 chunks/s |
-| 100 KB | 300 | 1.2 s | ~257 chunks/s |
-| 500 KB | 300 | 1.9 s | ~155 chunks/s |
+| 1 KB | 276 | 1.0-3.1 s | ~90-285 chunks/s |
+| 10 KB | 292 | 1.0-3.1 s | ~95-280 chunks/s |
+| 100 KB | 300 | 1.2-3.0 s | ~100-257 chunks/s |
+| 500 KB | 300 | 1.9-3.6 s | ~83-155 chunks/s |
 
-Rates vary with machine load; treat these as indicative rather than exact.
+The spread is real: the per-chunk cost is an async round trip to the editor, so it swings
+with machine load. Plan on roughly **100 chunks per second** and treat anything faster as
+a bonus.
 
 Chunking itself is a small fraction of that: 500 KB splits in about 85 ms in Smart mode
-and 45 ms in Character mode. Wall-clock time is dominated by the per-chunk round trip
-between the extension host and the editor. **Insertion time scales with chunk count, not
-with input size** — which is exactly why `maxChunks` is the setting that controls how long
-a large insertion takes.
+and 45 ms in Character mode. Wall-clock time is dominated by the round trips, not the
+splitting. **Insertion time scales with chunk count, not with input size** - which is why
+`maxChunks` is the setting that controls how long a large insertion takes.
 
 Practical guidance:
 
