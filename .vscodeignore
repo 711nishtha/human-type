@@ -19,3 +19,9 @@ scripts/**
 human-type-*.vsix
 START-HERE.md
 CONTRIBUTING.md
+
+# Local-only working areas used while preparing a release.
+# Never part of the published extension.
+github/**
+github
+UPLOAD-GUIDE.md
